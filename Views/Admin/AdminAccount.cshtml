@@ -1,0 +1,53 @@
+﻿
+@{
+    ViewData["Title"] = "AdminAccount";
+}
+
+    
+
+<h2>Admin's Account Page</h2>
+
+<!-- Here should come something asynchronous xhr...-->
+<!-- Like, getting all Users list-->
+<body>
+    <div class="allUser">
+        <ul id="allUsers" class="users-ul">
+        </ul>
+        <script type="text/javascript" language="javascript">
+            function getAllUsers() {
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", "/Admin/AdminGetAllUser")
+                xhr.onload = function () {
+                    var users = JSON.parse(this.responseText);
+                    console.log(users);
+                    const allUsers_ul = document.getElementById("allUsers");
+
+                    for (var i = 0; i < users.length; i++) {
+                        var user = users[i];
+                        const li = document.createElement("li");
+                        const p = document.createElement("p");
+
+                        var id = user.id;
+                        var username = user.username;
+                        var email = user.email;
+                        var password = user.password;
+                        var banned = user.banned;
+
+                        p.appendChild(document.createTextNode(`ID: ${id}, Username: ${username}, Email: ${email}, Password: ${password}, Banned: ${banned}`));
+                        li.appendChild(p);
+                        allUsers_ul.appendChild(li);
+                    }
+                };
+                xhr.send()
+            }
+        </script>
+        <button onclick="getAllUsers()">AllUsers</button>
+    </div>
+
+    
+</body>
+
+
+
+
+

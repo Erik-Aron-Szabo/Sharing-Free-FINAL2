@@ -1,0 +1,37 @@
+﻿
+@{
+    ViewData["Title"] = "MyAccount";
+}
+
+@using Microsoft.AspNetCore.Http;
+@using Share_Free.Controllers;
+@using Share_Free.Services;
+@using Sharing_Free.Domain;
+
+            
+@{
+    string username = Context.User.FindFirst("Username").Value.ToString();
+ }
+<h1>@username's Account</h1>
+
+<div>
+    <h2>MyPosts</h2>
+    <ul>
+        @{
+            // Make a button, so when user clicks on it, it will take him to his post
+            PostService pService = new PostService();
+            List<Post> myPosts = pService.GetAllPostsFromUser(username);
+
+            foreach (var post in myPosts)
+            {
+                <li>
+                    
+                    <p>
+                    <strong>Post:</strong>
+                    Title: @post.Title Date: @post.Date 
+                    </p>
+                </li>
+            }
+        }
+    </ul>
+</div>

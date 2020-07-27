@@ -1,0 +1,172 @@
+﻿drop table if exists "user" cascade;
+drop table if exists post cascade;
+drop table if exists "comment" cascade;
+drop table if exists "group" cascade;
+drop table if exists user_group cascade;
+drop table if exists user_reports cascade;
+
+
+--user
+create table "user"(
+	user_id serial primary key,
+	username varchar(18) unique,
+	email varchar(50),
+	"password" varchar(32),
+	banned boolean,
+	isAdmin boolean
+
+);
+
+--post
+create table post(
+	post_id serial primary key,
+	username varchar(18) references "user"(username),
+	title text,
+	description text,
+	date timestamp
+);
+
+--comment
+create table "comment"(
+	comment_id serial primary key,
+	username varchar(18) references "user"(username),
+	"message" text,
+	date timestamp,
+	post_id int references post(post_id) on delete cascade
+ );
+
+
+
+
+
+
+--group
+create table "group"(
+	group_id serial primary key,
+	group_name varchar(18)
+);
+
+-- junction table N:M (user:group)
+create table user_group(
+	group_id int references "group"(group_id),
+	user_id int references "user"(user_id)
+);
+
+
+--user_reports
+create table user_reports (
+	reporter_id int references "user"(user_id),
+	reported_id int references "user"(user_id),
+	reason text,
+	date timestamp
+);
+
+-- inserting 
+
+--user
+insert into "user"(email, "password", username, banned, isAdmin)
+values ('erik@erik.com', 'erik', 'Erik121', false, false);
+insert into "user"(email, "password", username, banned, isAdmin)
+values ('peter@peter.com', 'peter', 'Peter', false, false);
+insert into "user"(email, "password", username, banned, isAdmin)
+values ('admin@admin.com', 'admin', 'Admin', false, true);
+insert into "user"(email, "password", username, banned, isAdmin)
+values ('john@john.com', 'john', 'John76', false, false);
+insert into "user"(email, "password", username, banned, isAdmin)
+values ('david@david.com', 'david', 'David', true, false);
+
+--POSTS
+insert into post(username, title, description, date)
+values ('Erik121', 'Open the eyes of the blind', 'That was His ministry', '2020-06-01 13:10:00');
+insert into post(username, title, description, date)
+values ('Peter', 'Bind up the brokenhearted', 'That was His ministry', '2020-06-02 13:10:00');
+insert into post(username, title, description, date)
+values ('Admin', 'Release the prisoners', 'That was His ministry', '2020-06-03 13:10:00');
+insert into post(username, title, description, date)
+values ('Admin', 'Did you see the twin towers on the money?', 'That event was telegraphed back in 1995! Wow!', '2020-06-03 13:10:00');
+
+
+--comment
+insert into "comment"(username, "message", date, post_id)
+values('Erik121', 'Yes! Nice!', '2020-06-02 13:10:00', 1);
+insert into "comment"(username, "message", date, post_id)
+values('Erik121', 'Yes! Wow!', '2020-06-02 13:11:00', 2);
+insert into "comment"(username, "message", date, post_id)
+values('Erik121', 'Yes! 707!', '2020-06-02 13:12:00', 3);
+insert into "comment"(username, "message", date, post_id)
+values('Peter', 'Yes! Nice!', '2020-06-02 13:13:00', 2);
+
+
+
+
+
+--groups
+insert into "group"(group_name)
+values('Group-1');
+insert into "group"(group_name)
+values('Group-2');
+insert into "group"(group_name)
+values('Group-3');
+
+
+-- junction user_group
+insert into user_group(group_id, user_id)
+values(1,1);
+insert into user_group(group_id, user_id)
+values(2,1);
+insert into user_group(group_id, user_id)
+values(1,3);
+insert into user_group(group_id, user_id)
+values(1,4);
+insert into user_group(group_id, user_id)
+values(3,2);
+insert into user_group(group_id, user_id)
+values(2,3);
+insert into user_group(group_id, user_id)
+values(1,4);
+insert into user_group(group_id, user_id)
+values(1,2);
+
+
+
+-- Priase ABBA!
+
+--Use this Jun 7 
+
+select distinct u.username, gr."group_name" from "group" as gr
+	inner join user_group as ug
+	on ug.group_id = gr.group_id
+	inner join "user" as u
+	on ug.user_id = u.user_id
+order by gr."group_name",  u.username asc;
+
+select distinct u.username, \"group\".group_name from \"group\" inner join user_group as ug on ug.group_id = \"group\".group_id inner join \"user\" as u on ug.user_id = @userId order by \"group\".group_name,  u.username asc;
+
+select distinct u.username, "group".group_name 
+from "group" 
+inner join user_group as ug on ug.group_id = "group".group_id 
+inner join "user" as u on ug.user_id = 1
+where u.username = 'Erik121'
+order by "group".group_name,  u.username asc;
+
+-- leaveGroup
+select distinct u.username, "group".group_name, "group".group_id 
+from "group" 
+inner join user_group as ug on ug.group_id = "group".group_id 
+inner join "user" as u on ug.user_id = 1
+where u.username = 'Erik121'
+order by "group".group_name,  u.username asc;
+
+
+delete from user_group
+where user_group.user_id = 1 and user_group.group_id = 1;
+
+
+---------------------------------------------
+
+select  u.username, "group".group_name, "group".group_id 
+from "group" 
+inner join user_group as ug on ug.group_id = "group".group_id 
+inner join "user" as u on ug.user_id = u.user_id
+
+order by "group".group_name,  u.username asc;

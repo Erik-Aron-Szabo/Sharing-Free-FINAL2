@@ -1,0 +1,44 @@
+﻿@model PostModelList
+<head>
+    <script src="~/js/newSite.js" defer></script>
+    <link href="~/css/site.css" rel="stylesheet" />
+    <script src="~/lib/jquery/dist/jquery.js" type="text/javascript"></script>
+</head>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+@using Share_Free.Services
+@using Sharing_Free.Domain
+<!--Search bar-->
+<body>
+    <h3>Welcome!</h3>
+    <div id="post_container">
+
+    </div>
+
+    <!-- The Posts -->
+    <h1>Posts</h1>
+    <h5>New Post</h5>
+    <div id="createpost">
+        
+    </div>
+
+    @*<div class="createpost">
+            <button onclick="createPost()">Create New Post</button>
+            <div id="createpostDiv" class="hidden">
+                <label>Title:</label>
+                <input type="text" name="title" id="posttitle" />
+
+                <label>Description:</label>
+                <input type="text" name="description" id="postdescription" />
+
+                <input type="submit" onclick="postCreatePost()" value="CreatePost" />
+
+            </div>
+        </div>*@
+</body>
+
+
+
+
