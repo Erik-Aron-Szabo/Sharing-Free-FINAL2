@@ -19,3 +19,7 @@ Simple project, demonstrating C#, ASP.NET, logging in, logging out. Route contro
 ![GitHub Logo](/images/Screenshot_4.png)
 
 
+Username: Erik121
+Password: erik
+
+(to test, use that)
